@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import requests
 import time
 import argparse
@@ -10,14 +8,6 @@ from requests.compat import urljoin
 
 
 class BotHandler(object):
-    """
-        BotHandler is a class which implements all back-end of the bot.
-        It has tree main functions:
-            'get_updates' — checks for new messages
-            'send_message' – posts new message to user
-            'get_answer' — computes the most relevant on a user's question
-    """
-
     def __init__(self, token, dialogue_manager):
         self.token = token
         self.api_url = "https://api.telegram.org/bot{}/".format(token)
