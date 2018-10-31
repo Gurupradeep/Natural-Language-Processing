@@ -3,8 +3,9 @@ import pickle
 import re
 import numpy as np
 
-nltk.download('stopwords')
+
 from nltk.corpus import stopwords
+nltk.download('stopwords')
 
 # Paths for all resources for the bot.
 RESOURCE_PATH = {
@@ -50,11 +51,17 @@ def load_embeddings(embeddings_path):
     #### YOUR CODE HERE ####
     ########################
 
-    # remove this when you're done
-    raise NotImplementedError(
-        "Open utils.py and fill with your code. In case of Google Colab, download"
-        "(https://github.com/hse-aml/natural-language-processing/blob/master/project/utils.py), "
-        "edit locally and upload using '> arrow on the left edge' -> Files -> UPLOAD")
+    starspace_embeddings = {}
+    dim = 0
+    for line in open(embeddings_path):
+        word,*vec = line.strip().split()
+        vf = []
+        dim = len(vec)
+        for v in vec :
+            vf.append(float(v))
+        starspace_embeddings[word] = np.array(vf, dtype=np.float32)
+
+    return starspace_embeddings, dim
 
 
 def question_to_vec(question, embeddings, dim):
@@ -65,13 +72,16 @@ def question_to_vec(question, embeddings, dim):
     ########################
     #### YOUR CODE HERE ####
     ########################
-
-    # remove this when you're done
-    raise NotImplementedError(
-        "Open utils.py and fill with your code. In case of Google Colab, download"
-        "(https://github.com/hse-aml/natural-language-processing/blob/master/project/utils.py), "
-        "edit locally and upload using '> arrow on the left edge' -> Files -> UPLOAD")
-
+    vec = np.zeros((dim,), dtype=np.float32)
+    count = 0
+    for w in question.split():
+        if w in embeddings:
+            count += 1
+            vec += embeddings[w]
+    if count == 0:
+        return vec
+    return vec/count
+    
 
 def unpickle_file(filename):
     """Returns the result of unpickling the file content."""
